@@ -36,6 +36,45 @@ var SUB = registerInstruction(0x03, "SUB", func(ctx *ExecutionContext) {
 	ctx.stack.push(word.NewWord().Sub(a, b))
 })
 
+var LT = registerInstruction(0x10, "LT", func(ctx *ExecutionContext) {
+	a := ctx.stack.pop()
+	b := ctx.stack.pop()
+	var result uint64
+	if a.Lt(b) {
+		result = 1
+	}
+	ctx.stack.push(word.NewFromInt(result))
+})
+
+var GT = registerInstruction(0x11, "GT", func(ctx *ExecutionContext) {
+	a := ctx.stack.pop()
+	b := ctx.stack.pop()
+	var result uint64
+	if a.Gt(b) {
+		result = 1
+	}
+	ctx.stack.push(word.NewFromInt(result))
+})
+
+var EQ = registerInstruction(0x14, "EQ", func(ctx *ExecutionContext) {
+	a := ctx.stack.pop()
+	b := ctx.stack.pop()
+	var result uint64
+	if a.Eq(b) {
+		result = 1
+	}
+	ctx.stack.push(word.NewFromInt(result))
+})
+
+var ISZERO = registerInstruction(0x15, "ISZERO", func(ctx *ExecutionContext) {
+	item := ctx.stack.pop()
+	var result uint64
+	if item.IsZero() {
+		result = 1
+	}
+	ctx.stack.push(word.NewFromInt(result))
+})
+
 var POP = registerInstruction(0x50, "POP", func(ctx *ExecutionContext) {
 	ctx.stack.pop()
 })

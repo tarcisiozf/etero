@@ -47,3 +47,7 @@ func (st *Stack) print() {
 
 	fmt.Println("stack:", items)
 }
+
+func (st *Stack) peek(nth int) word.Word {
+	return st.storage[nth]
+}

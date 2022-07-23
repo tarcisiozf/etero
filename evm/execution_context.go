@@ -25,14 +25,6 @@ func (execCtx *ExecutionContext) Stop() {
 	execCtx.stopped = true
 }
 
-func (execCtx *ExecutionContext) IsRunning() bool {
-	return !execCtx.stopped
-}
-
-func (execCtx *ExecutionContext) Pc() int {
-	return execCtx.pc
-}
-
 func (execCtx *ExecutionContext) ReadCode(numBytes int) []byte {
 	slice := execCtx.code[execCtx.pc : execCtx.pc+numBytes]
 	execCtx.pc += numBytes

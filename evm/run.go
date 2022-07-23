@@ -7,8 +7,8 @@ import (
 func Run(code []byte) {
 	ctx := NewExecutionContext(code)
 
-	for ctx.IsRunning() {
-		prevPc := ctx.Pc()
+	for !ctx.stopped {
+		prevPc := ctx.pc
 		ix := decodeOpcode(ctx)
 		ix.Execute(ctx)
 

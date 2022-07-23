@@ -1,12 +1,11 @@
 package evm
 
 import (
-	"etero/evm/exec"
 	"fmt"
 )
 
 func Run(code []byte) {
-	ctx := exec.NewExecutionContext(code)
+	ctx := NewExecutionContext(code)
 
 	for ctx.IsRunning() {
 		prevPc := ctx.Pc()
@@ -18,9 +17,9 @@ func Run(code []byte) {
 	}
 }
 
-func decodeOpcode(execCtx *exec.ExecutionContext) *exec.Instruction {
-	opcode := exec.Opcode(execCtx.ReadCode(1)[0])
-	ix := exec.InstructionsByOpcode[opcode]
+func decodeOpcode(execCtx *ExecutionContext) *Instruction {
+	opcode := Opcode(execCtx.ReadCode(1)[0])
+	ix := InstructionsByOpcode[opcode]
 	if ix == nil {
 		panic("unknown opcode")
 	}

@@ -1,4 +1,4 @@
-package exec
+package evm
 
 import "etero/evm/word"
 

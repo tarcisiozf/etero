@@ -36,6 +36,10 @@ var SUB = registerInstruction(0x03, "SUB", func(ctx *ExecutionContext) {
 	ctx.stack.push(word.NewWord().Sub(a, b))
 })
 
+var POP = registerInstruction(0x50, "POP", func(ctx *ExecutionContext) {
+	ctx.stack.pop()
+})
+
 var MLOAD = registerInstruction(0x51, "MLOAD", func(ctx *ExecutionContext) {
 	offset := ctx.stack.pop()
 	w := ctx.memory.loadWord(offset)

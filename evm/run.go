@@ -5,7 +5,7 @@ import (
 )
 
 func Run(code []byte) {
-	ctx := NewExecutionContext(code)
+	ctx := newExecutionContext(code)
 
 	for !ctx.stopped {
 		prevPc := ctx.pc
@@ -13,8 +13,8 @@ func Run(code []byte) {
 		ix.Execute(ctx)
 
 		fmt.Printf("%s @ pc=%d\n", ix.Name, prevPc)
-		ctx.stack.Print()
-		ctx.memory.Print()
+		ctx.stack.print()
+		ctx.memory.print()
 		fmt.Println()
 	}
 
@@ -27,7 +27,7 @@ func decodeOpcode(execCtx *ExecutionContext) *Instruction {
 		return STOP
 	}
 
-	opcode := Opcode(execCtx.ReadCode(1)[0])
+	opcode := Opcode(execCtx.readCode(1)[0])
 	ix := InstructionsByOpcode[opcode]
 	if ix == nil {
 		panic("unknown opcode")

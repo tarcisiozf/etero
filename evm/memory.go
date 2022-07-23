@@ -9,21 +9,21 @@ type Memory struct {
 	storage map[string]byte
 }
 
-func NewMemory() *Memory {
+func newMemory() *Memory {
 	return &Memory{
 		storage: make(map[string]byte),
 	}
 }
 
-func (mem *Memory) Store(offset word.Word, value byte) {
+func (mem *Memory) store(offset word.Word, value byte) {
 	mem.storage[offset.String()] = value
 }
 
-func (mem *Memory) Load(offset word.Word) byte {
+func (mem *Memory) load(offset word.Word) byte {
 	return mem.storage[offset.String()]
 }
 
-func (mem *Memory) LoadRange(offset word.Word, length uint64) []byte {
+func (mem *Memory) loadRange(offset word.Word, length uint64) []byte {
 	data := make([]byte, length)
 
 	for i := uint64(0); i < length; i++ {
@@ -34,7 +34,7 @@ func (mem *Memory) LoadRange(offset word.Word, length uint64) []byte {
 	return data
 }
 
-func (mem *Memory) Print() {
+func (mem *Memory) print() {
 	items := make([]byte, len(mem.storage))
 	i := 0
 

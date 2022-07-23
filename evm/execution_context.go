@@ -13,26 +13,26 @@ type ExecutionContext struct {
 	returnData []byte
 }
 
-func NewExecutionContext(code []byte) *ExecutionContext {
+func newExecutionContext(code []byte) *ExecutionContext {
 	return &ExecutionContext{
 		code:       code,
-		stack:      NewStack(),
-		memory:     NewMemory(),
+		stack:      newStack(),
+		memory:     newMemory(),
 		returnData: make([]byte, 0),
 	}
 }
 
-func (execCtx *ExecutionContext) Stop() {
+func (execCtx *ExecutionContext) stop() {
 	execCtx.stopped = true
 }
 
-func (execCtx *ExecutionContext) ReadCode(numBytes int) []byte {
+func (execCtx *ExecutionContext) readCode(numBytes int) []byte {
 	slice := execCtx.code[execCtx.pc : execCtx.pc+numBytes]
 	execCtx.pc += numBytes
 	return slice
 }
 
 func (execCtx *ExecutionContext) setReturnData(offset word.Word, length uint64) {
-	execCtx.Stop()
-	execCtx.returnData = execCtx.memory.LoadRange(offset, length)
+	execCtx.stop()
+	execCtx.returnData = execCtx.memory.loadRange(offset, length)
 }

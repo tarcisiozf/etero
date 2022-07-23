@@ -11,13 +11,13 @@ type Stack struct {
 	storage []word.Word
 }
 
-func NewStack() *Stack {
+func newStack() *Stack {
 	return &Stack{
 		storage: make([]word.Word, 0),
 	}
 }
 
-func (st *Stack) Push(item word.Word) {
+func (st *Stack) push(item word.Word) {
 	if len(st.storage) == MaxStackSize {
 		panic("stack overflow")
 	}
@@ -25,7 +25,7 @@ func (st *Stack) Push(item word.Word) {
 	st.storage = append(st.storage, item)
 }
 
-func (st *Stack) Pop() word.Word {
+func (st *Stack) pop() word.Word {
 	size := len(st.storage)
 	if size == 0 {
 		panic("stack underflow")
@@ -38,7 +38,7 @@ func (st *Stack) Pop() word.Word {
 	return item
 }
 
-func (st *Stack) Print() {
+func (st *Stack) print() {
 	items := make([]string, len(st.storage))
 
 	for i, item := range st.storage {

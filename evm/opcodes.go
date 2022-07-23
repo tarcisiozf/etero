@@ -76,3 +76,9 @@ var DUP3 = registerInstruction(0x82, "DUP3", func(ctx *ExecutionContext) {
 })
 
 // TODO: Implement until DUP16
+
+var SWAP1 = registerInstruction(0x90, "SWAP1", func(ctx *ExecutionContext) {
+	ctx.stack.swap(1)
+})
+
+// TODO: Implement until SWAP16

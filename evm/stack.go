@@ -51,3 +51,12 @@ func (st *Stack) print() {
 func (st *Stack) peek(nth int) word.Word {
 	return st.storage[nth]
 }
+
+func (st *Stack) swap(i int) {
+	if i == 0 {
+		return
+	}
+
+	size := len(st.storage)
+	st.storage[size-1], st.storage[size-i-1] = st.storage[size-i-1], st.storage[size-1]
+}

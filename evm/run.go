@@ -21,13 +21,13 @@ func Run(code []byte) {
 	fmt.Println("Output:", ctx.returnData)
 }
 
-func decodeOpcode(execCtx *ExecutionContext) *Instruction {
+func decodeOpcode(ctx *ExecutionContext) *Instruction {
 	// section 9.4.1 of the yellow paper, the operation to be executed if pc is outside code is STOP
-	if execCtx.pc >= len(execCtx.code) {
+	if ctx.pc >= len(ctx.code) {
 		return STOP
 	}
 
-	opcode := Opcode(execCtx.readCode(1)[0])
+	opcode := Opcode(ctx.readCode(1)[0])
 	ix := InstructionsByOpcode[opcode]
 	if ix == nil {
 		panic(fmt.Sprintf("unknown opcode 0x%x", opcode))

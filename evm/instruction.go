@@ -8,10 +8,10 @@ var InstructionsByOpcode = make(map[Opcode]*Instruction)
 type Instruction struct {
 	Opcode  Opcode
 	Name    string
-	Execute func(execCtx *ExecutionContext)
+	Execute func(ctx *ExecutionContext)
 }
 
-func registerInstruction(opcode Opcode, name string, executeFunc func(execCtx *ExecutionContext)) *Instruction {
+func registerInstruction(opcode Opcode, name string, executeFunc func(ctx *ExecutionContext)) *Instruction {
 	ix := &Instruction{
 		Opcode:  opcode,
 		Name:    name,

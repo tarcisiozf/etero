@@ -43,25 +43,25 @@ func findValidJumpDestinations(code []byte) map[int]bool {
 	return dests
 }
 
-func (execCtx *ExecutionContext) stop() {
-	execCtx.stopped = true
+func (ctx *ExecutionContext) stop() {
+	ctx.stopped = true
 }
 
-func (execCtx *ExecutionContext) readCode(numBytes int) []byte {
-	slice := execCtx.code[execCtx.pc : execCtx.pc+numBytes]
-	execCtx.pc += numBytes
+func (ctx *ExecutionContext) readCode(numBytes int) []byte {
+	slice := ctx.code[ctx.pc : ctx.pc+numBytes]
+	ctx.pc += numBytes
 	return slice
 }
 
-func (execCtx *ExecutionContext) setReturnData(offset word.Word, length uint64) {
-	execCtx.stop()
-	execCtx.returnData = execCtx.memory.loadRange(offset, length)
+func (ctx *ExecutionContext) setReturnData(offset word.Word, length uint64) {
+	ctx.stop()
+	ctx.returnData = ctx.memory.loadRange(offset, length)
 }
 
-func (execCtx *ExecutionContext) jump(targetDest int) {
-	if !execCtx.jumpdests[targetDest] {
+func (ctx *ExecutionContext) jump(targetDest int) {
+	if !ctx.jumpdests[targetDest] {
 		panic("invalid jump destination")
 	}
 
-	execCtx.pc = targetDest
+	ctx.pc = targetDest
 }

@@ -54,12 +54,6 @@ var MSTORE8 = registerInstruction(0x53, "MSTORE8", func(ctx *ExecutionContext) {
 	ctx.memory.store(offset, byte(value.Uint64()))
 })
 
-var RETURN = registerInstruction(0xf3, "RETURN", func(ctx *ExecutionContext) {
-	offset := ctx.stack.pop()
-	length := ctx.stack.pop().Uint64()
-	ctx.setReturnData(offset, length)
-})
-
 var JUMP = registerInstruction(0x56, "JUMP", func(ctx *ExecutionContext) {
 	targetDest := int(ctx.stack.pop().Uint64())
 	ctx.jump(targetDest)
@@ -212,4 +206,15 @@ var SWAP15 = registerInstruction(0x9E, "SWAP15", func(ctx *ExecutionContext) {
 
 var SWAP16 = registerInstruction(0x9F, "SWAP16", func(ctx *ExecutionContext) {
 	ctx.stack.swap(16)
+})
+
+var RETURN = registerInstruction(0xf3, "RETURN", func(ctx *ExecutionContext) {
+	offset := ctx.stack.pop()
+	length := ctx.stack.pop().Uint64()
+	ctx.setReturnData(offset, length)
+})
+
+var REVERT = registerInstruction(0xfd, "REVERT", func(ctx *ExecutionContext) {
+	// TODO: no-op for now
+	ctx.stop()
 })

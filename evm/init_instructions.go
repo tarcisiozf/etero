@@ -12,6 +12,10 @@ var PUSH1 = registerInstruction(0x60, "PUSH1", func(execCtx *ExecutionContext) {
 	execCtx.stack.push(conv)
 })
 
+var PUSH32 = registerInstruction(0x7f, "PUSH32", func(execCtx *ExecutionContext) {
+	panic("not implemented")
+})
+
 var ADD = registerInstruction(0x01, "ADD", func(execCtx *ExecutionContext) {
 	a := execCtx.stack.pop()
 	b := execCtx.stack.pop()
@@ -34,4 +38,25 @@ var RETURN = registerInstruction(0xf3, "RETURN", func(execCtx *ExecutionContext)
 	offset := execCtx.stack.pop()
 	length := execCtx.stack.pop().Uint64()
 	execCtx.setReturnData(offset, length)
+})
+
+var JUMPDEST = registerInstruction(0x5b, "JUMPDEST", func(execCtx *ExecutionContext) {})
+
+var JUMP = registerInstruction(0x56, "JUMP", func(execCtx *ExecutionContext) {
+	targetDest := int(execCtx.stack.pop().Uint64())
+	execCtx.jump(targetDest)
+})
+
+var JUMPI = registerInstruction(0x57, "JUMPI", func(execCtx *ExecutionContext) {
+	targetDest := int(execCtx.stack.pop().Uint64())
+	cond := execCtx.stack.pop()
+
+	if !cond.IsZero() {
+		execCtx.jump(targetDest)
+	}
+})
+
+var PC = registerInstruction(0x58, "PC", func(execCtx *ExecutionContext) {
+	pc := word.NewInt(uint64(execCtx.pc))
+	execCtx.stack.push(pc)
 })

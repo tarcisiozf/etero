@@ -12,7 +12,7 @@ var PUSH1 = registerInstruction(0x60, "PUSH1", func(execCtx *ExecutionContext) {
 	execCtx.stack.push(conv)
 })
 
-// TODO: implement PUSH2...PUSH32
+// TODO: implement until PUSH32
 
 var PUSH32 = registerInstruction(0x7f, "PUSH32", func(execCtx *ExecutionContext) {
 	panic("not implemented")
@@ -67,4 +67,12 @@ var DUP1 = registerInstruction(0x80, "DUP1", func(execCtx *ExecutionContext) {
 	execCtx.stack.push(execCtx.stack.peek(0))
 })
 
-// TODO: Implement DUP2...DUP16
+var DUP2 = registerInstruction(0x81, "DUP2", func(execCtx *ExecutionContext) {
+	execCtx.stack.push(execCtx.stack.peek(1))
+})
+
+var DUP3 = registerInstruction(0x82, "DUP3", func(execCtx *ExecutionContext) {
+	execCtx.stack.push(execCtx.stack.peek(2))
+})
+
+// TODO: Implement until DUP16

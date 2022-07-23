@@ -23,3 +23,15 @@ var MUL = registerInstruction(0x02, "MUL", func(execCtx *ExecutionContext) {
 	b := execCtx.stack.Pop()
 	execCtx.stack.Push(word.NewWord().Mul(a, b))
 })
+
+var MSTORE8 = registerInstruction(0x53, "MSTORE8", func(execCtx *ExecutionContext) {
+	offset := execCtx.stack.Pop()
+	data := execCtx.stack.Pop() // TODO: modulo 256
+	execCtx.memory.Store(offset, byte(data.Uint64()))
+})
+
+var RETURN = registerInstruction(0xf3, "RETURN", func(execCtx *ExecutionContext) {
+	offset := execCtx.stack.Pop()
+	length := execCtx.stack.Pop().Uint64()
+	execCtx.setReturnData(offset, length)
+})

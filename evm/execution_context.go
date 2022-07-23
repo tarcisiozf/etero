@@ -1,23 +1,24 @@
 package evm
 
 import (
-	"fmt"
-	"strings"
+	"etero/evm/word"
 )
 
 type ExecutionContext struct {
-	code    []byte
-	stack   *Stack
-	memory  *Memory
-	pc      int
-	stopped bool
+	code       []byte
+	stack      *Stack
+	memory     *Memory
+	pc         int
+	stopped    bool
+	returnData []byte
 }
 
 func NewExecutionContext(code []byte) *ExecutionContext {
 	return &ExecutionContext{
-		code:   code,
-		stack:  NewStack(),
-		memory: NewMemory(),
+		code:       code,
+		stack:      NewStack(),
+		memory:     NewMemory(),
+		returnData: make([]byte, 0),
 	}
 }
 
@@ -31,12 +32,7 @@ func (execCtx *ExecutionContext) ReadCode(numBytes int) []byte {
 	return slice
 }
 
-func (execCtx *ExecutionContext) PrintStack() {
-	items := make([]string, len(execCtx.stack.storage))
-
-	for i, item := range execCtx.stack.storage {
-		items[i] = item.String()
-	}
-
-	fmt.Printf("STACK: [%s]\n", strings.Join(items, " "))
+func (execCtx *ExecutionContext) setReturnData(offset word.Word, length uint64) {
+	execCtx.Stop()
+	execCtx.returnData = execCtx.memory.LoadRange(offset, length)
 }

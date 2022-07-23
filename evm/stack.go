@@ -1,6 +1,9 @@
 package evm
 
-import "etero/evm/word"
+import (
+	"etero/evm/word"
+	"fmt"
+)
 
 const MaxStackSize = 1024
 
@@ -15,7 +18,7 @@ func NewStack() *Stack {
 }
 
 func (st *Stack) Push(item word.Word) {
-	if st.Size() == MaxStackSize {
+	if len(st.storage) == MaxStackSize {
 		panic("stack overflow")
 	}
 
@@ -23,16 +26,24 @@ func (st *Stack) Push(item word.Word) {
 }
 
 func (st *Stack) Pop() word.Word {
-	if st.Size() == 0 {
+	size := len(st.storage)
+	if size == 0 {
 		panic("stack underflow")
 	}
 
-	item := st.storage[0]
-	st.storage = st.storage[1:]
+	pos := size - 1
+	item := st.storage[pos]
+	st.storage = st.storage[:pos]
 
 	return item
 }
 
-func (st *Stack) Size() int {
-	return len(st.storage)
+func (st *Stack) Print() {
+	items := make([]string, len(st.storage))
+
+	for i, item := range st.storage {
+		items[i] = item.String()
+	}
+
+	fmt.Println("stack:", items)
 }

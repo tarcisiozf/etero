@@ -12,9 +12,13 @@ func Run(code []byte) {
 		ix := decodeOpcode(ctx)
 		ix.Execute(ctx)
 
-		fmt.Printf("ix: %s | pc: %d\n", ix.Name, prevPc)
-		ctx.PrintStack()
+		fmt.Printf("%s @ pc=%d\n", ix.Name, prevPc)
+		ctx.stack.Print()
+		ctx.memory.Print()
+		fmt.Println()
 	}
+
+	fmt.Println("Output:", ctx.returnData)
 }
 
 func decodeOpcode(execCtx *ExecutionContext) *Instruction {

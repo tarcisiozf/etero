@@ -64,15 +64,15 @@ var PC = registerInstruction(0x58, "PC", func(ctx *ExecutionContext) {
 })
 
 var DUP1 = registerInstruction(0x80, "DUP1", func(ctx *ExecutionContext) {
-	ctx.stack.push(ctx.stack.peek(0))
-})
-
-var DUP2 = registerInstruction(0x81, "DUP2", func(ctx *ExecutionContext) {
 	ctx.stack.push(ctx.stack.peek(1))
 })
 
-var DUP3 = registerInstruction(0x82, "DUP3", func(ctx *ExecutionContext) {
+var DUP2 = registerInstruction(0x81, "DUP2", func(ctx *ExecutionContext) {
 	ctx.stack.push(ctx.stack.peek(2))
+})
+
+var DUP3 = registerInstruction(0x82, "DUP3", func(ctx *ExecutionContext) {
+	ctx.stack.push(ctx.stack.peek(3))
 })
 
 // TODO: Implement until DUP16

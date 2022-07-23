@@ -49,7 +49,7 @@ func (st *Stack) print() {
 }
 
 func (st *Stack) peek(nth int) word.Word {
-	return st.storage[nth]
+	return st.storage[len(st.storage)-nth]
 }
 
 func (st *Stack) swap(i int) {

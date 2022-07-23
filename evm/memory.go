@@ -45,3 +45,7 @@ func (mem *Memory) print() {
 
 	fmt.Println("memory:", items)
 }
+
+func (mem *Memory) size() int {
+	return len(mem.storage) // size of 32
+}

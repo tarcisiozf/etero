@@ -38,8 +38,8 @@ var SUB = registerInstruction(0x03, "SUB", func(ctx *ExecutionContext) {
 
 var MSTORE8 = registerInstruction(0x53, "MSTORE8", func(ctx *ExecutionContext) {
 	offset := ctx.stack.pop()
-	data := ctx.stack.pop() // TODO: modulo 256
-	ctx.memory.store(offset, byte(data.Uint64()))
+	value := ctx.stack.pop() // TODO: modulo 256
+	ctx.memory.store(offset, byte(value.Uint64()))
 })
 
 var RETURN = registerInstruction(0xf3, "RETURN", func(ctx *ExecutionContext) {
@@ -47,8 +47,6 @@ var RETURN = registerInstruction(0xf3, "RETURN", func(ctx *ExecutionContext) {
 	length := ctx.stack.pop().Uint64()
 	ctx.setReturnData(offset, length)
 })
-
-var JUMPDEST = registerInstruction(0x5b, "JUMPDEST", func(ctx *ExecutionContext) {})
 
 var JUMP = registerInstruction(0x56, "JUMP", func(ctx *ExecutionContext) {
 	targetDest := int(ctx.stack.pop().Uint64())
@@ -68,6 +66,13 @@ var PC = registerInstruction(0x58, "PC", func(ctx *ExecutionContext) {
 	pc := word.NewInt(uint64(ctx.pc))
 	ctx.stack.push(pc)
 })
+
+var MSIZE = registerInstruction(0x59, "MSIZE", func(ctx *ExecutionContext) {
+	size := word.NewInt(32 * uint64(ctx.memory.size()))
+	ctx.stack.push(size)
+})
+
+var JUMPDEST = registerInstruction(0x5b, "JUMPDEST", func(ctx *ExecutionContext) {})
 
 var DUP1 = registerInstruction(0x80, "DUP1", func(ctx *ExecutionContext) {
 	ctx.stack.push(ctx.stack.peek(1))

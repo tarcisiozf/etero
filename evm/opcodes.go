@@ -30,6 +30,12 @@ var MUL = registerInstruction(0x02, "MUL", func(ctx *ExecutionContext) {
 	ctx.stack.push(word.NewWord().Mul(a, b))
 })
 
+var SUB = registerInstruction(0x03, "SUB", func(ctx *ExecutionContext) {
+	a := ctx.stack.pop()
+	b := ctx.stack.pop()
+	ctx.stack.push(word.NewWord().Sub(a, b))
+})
+
 var MSTORE8 = registerInstruction(0x53, "MSTORE8", func(ctx *ExecutionContext) {
 	offset := ctx.stack.pop()
 	data := ctx.stack.pop() // TODO: modulo 256

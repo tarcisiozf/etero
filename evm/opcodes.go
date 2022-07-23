@@ -8,7 +8,7 @@ var STOP = registerInstruction(0x00, "STOP", func(ctx *ExecutionContext) {
 
 var PUSH1 = registerInstruction(0x60, "PUSH1", func(ctx *ExecutionContext) {
 	data := ctx.readCode(1)[0]
-	conv := word.NewInt(uint64(data))
+	conv := word.NewFromInt(uint64(data))
 	ctx.stack.push(conv)
 })
 
@@ -34,6 +34,18 @@ var SUB = registerInstruction(0x03, "SUB", func(ctx *ExecutionContext) {
 	a := ctx.stack.pop()
 	b := ctx.stack.pop()
 	ctx.stack.push(word.NewWord().Sub(a, b))
+})
+
+var MLOAD = registerInstruction(0x51, "MLOAD", func(ctx *ExecutionContext) {
+	offset := ctx.stack.pop()
+	w := ctx.memory.loadWord(offset)
+	ctx.stack.push(w)
+})
+
+var MSTORE = registerInstruction(0x52, "MSTORE", func(ctx *ExecutionContext) {
+	offset := ctx.stack.pop()
+	value := ctx.stack.pop()
+	ctx.memory.storeWord(offset, value)
 })
 
 var MSTORE8 = registerInstruction(0x53, "MSTORE8", func(ctx *ExecutionContext) {
@@ -63,12 +75,12 @@ var JUMPI = registerInstruction(0x57, "JUMPI", func(ctx *ExecutionContext) {
 })
 
 var PC = registerInstruction(0x58, "PC", func(ctx *ExecutionContext) {
-	pc := word.NewInt(uint64(ctx.pc))
+	pc := word.NewFromInt(uint64(ctx.pc))
 	ctx.stack.push(pc)
 })
 
 var MSIZE = registerInstruction(0x59, "MSIZE", func(ctx *ExecutionContext) {
-	size := word.NewInt(32 * uint64(ctx.memory.size()))
+	size := word.NewFromInt(32 * uint64(ctx.memory.size()))
 	ctx.stack.push(size)
 })
 

@@ -27,7 +27,7 @@ func (mem *Memory) loadRange(offset word.Word, length uint64) []byte {
 	data := make([]byte, length)
 
 	for i := uint64(0); i < length; i++ {
-		pos := word.NewWord().Add(offset, word.NewInt(i))
+		pos := word.NewWord().Add(offset, word.NewFromInt(i))
 		data[i] = mem.storage[pos.String()]
 	}
 
@@ -44,6 +44,18 @@ func (mem *Memory) print() {
 	}
 
 	fmt.Println("memory:", items)
+}
+
+func (mem *Memory) loadWord(offset word.Word) word.Word {
+	return word.NewFromBytes(mem.loadRange(offset, 32))
+}
+
+func (mem *Memory) storeWord(offset, value word.Word) {
+	hex := []byte(value.String())[2:]
+	for i := uint64(0); i < 32; i++ {
+		pos := word.NewWord().Add(offset, word.NewFromInt(i))
+		mem.store(pos, hex[i])
+	}
 }
 
 func (mem *Memory) size() int {

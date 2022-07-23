@@ -30,7 +30,7 @@ func decodeOpcode(execCtx *ExecutionContext) *Instruction {
 	opcode := Opcode(execCtx.readCode(1)[0])
 	ix := InstructionsByOpcode[opcode]
 	if ix == nil {
-		panic("unknown opcode")
+		panic(fmt.Sprintf("unknown opcode 0x%x", opcode))
 	}
 
 	return ix

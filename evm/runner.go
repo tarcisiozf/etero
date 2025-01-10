@@ -9,7 +9,10 @@ func Run(code []byte) error {
 	execContext := NewExecutionContext(code)
 	instructionRegistry := NewInstructionsRegistry()
 
-	registerEvmOpcodes(instructionRegistry)
+	err := registerEvmOpcodes(instructionRegistry)
+	if err != nil {
+		return err
+	}
 
 	for !execContext.stopped {
 		instruction, err := decodeOpcode(execContext, instructionRegistry)
@@ -35,8 +38,13 @@ func registerEvmOpcodes(registry *InstructionsRegistry) error {
 }
 
 func decodeOpcode(execContext *ExecutionContext, registry *InstructionsRegistry) (*Instruction, error) {
-	if execContext.pc < 0 || execContext.pc > len(execContext.code) {
+	if execContext.pc < 0 {
 		return nil, errors.New("invalid code offset")
+	}
+
+	// section 9.4.1 of the yellow paper, the operation to be executed if pc is outside code is STOP
+	if execContext.pc >= len(execContext.code) {
+		return Stop, nil
 	}
 
 	opcode := int(execContext.readCode(1)[0])

@@ -1,6 +1,6 @@
 package evm
 
-const StackMaxDepth = 1024
+const StackMaxDepth = 1024 // TODO: remove from here
 
 type ExecutionContext struct {
 	code    []byte

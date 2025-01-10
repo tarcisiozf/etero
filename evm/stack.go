@@ -3,18 +3,18 @@ package evm
 import "errors"
 
 type Stack struct {
-	storage  []int
+	storage  []Word
 	maxDepth int
 }
 
 func NewStack(maxDepth int) *Stack {
 	return &Stack{
-		storage:  make([]int, 0),
+		storage:  make([]Word, 0),
 		maxDepth: maxDepth,
 	}
 }
 
-func (s *Stack) push(item int) error {
+func (s *Stack) push(item Word) error {
 	if len(s.storage)+1 > s.maxDepth {
 		return errors.New("stack overflow")
 	}
@@ -23,10 +23,10 @@ func (s *Stack) push(item int) error {
 	return nil
 }
 
-func (s *Stack) pop() (int, error) {
+func (s *Stack) pop() (w Word, e error) {
 	size := len(s.storage)
 	if size == 0 {
-		return 0, errors.New("stack underflow")
+		return w, errors.New("stack underflow")
 	}
 
 	pos := size - 1

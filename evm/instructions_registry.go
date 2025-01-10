@@ -25,3 +25,7 @@ func (ir *InstructionsRegistry) register(instruction *Instruction) error {
 	ir.opcodeIndex[instruction.opcode] = instruction
 	return nil
 }
+
+func (ir *InstructionsRegistry) find(opcode int) *Instruction {
+	return ir.opcodeIndex[opcode]
+}

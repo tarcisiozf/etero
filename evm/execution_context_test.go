@@ -24,4 +24,15 @@ func TestNewExecutionContext(t *testing.T) {
 		slice = execCtx.readCode(1)
 		assert.Equal(t, []byte{4}, slice)
 	})
+
+	t.Run("setReturnData", func(t *testing.T) {
+		value := byte(42)
+		offset := NewWordFromUint64(0)
+		length := NewWordFromUint64(1)
+		execCtx.memory.store(offset, value)
+
+		err := execCtx.setReturnData(offset, length)
+		assert.Nil(t, err)
+		assert.Equal(t, []byte{value}, execCtx.returnData)
+	})
 }

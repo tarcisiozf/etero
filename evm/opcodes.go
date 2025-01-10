@@ -51,4 +51,37 @@ var (
 			return ctx.stack.push(a.Mul(b)) // TODO: mod 2**256
 		},
 	}
+
+	Mstore8 = &Instruction{
+		opcode: 0x53,
+		name:   "MSTORE8",
+		execFunc: func(ctx *ExecutionContext) error {
+			offset, err := ctx.stack.pop()
+			if err != nil {
+				return err
+			}
+			value, err := ctx.stack.pop()
+			if err != nil {
+				return err
+			}
+			ctx.memory.store(offset, byte(value.Mod(NewWordFromUint64(256)).Uint64()))
+			return nil
+		},
+	}
+
+	Return = &Instruction{
+		opcode: 0xf3,
+		name:   "RETURN",
+		execFunc: func(ctx *ExecutionContext) error {
+			offset, err := ctx.stack.pop()
+			if err != nil {
+				return err
+			}
+			length, err := ctx.stack.pop()
+			if err != nil {
+				return err
+			}
+			return ctx.setReturnData(offset, length)
+		},
+	}
 )

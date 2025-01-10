@@ -28,7 +28,7 @@ func Run(code []byte) error {
 }
 
 func registerEvmOpcodes(registry *InstructionsRegistry) error {
-	instructions := []*Instruction{Stop, Add, Mul, Push1}
+	instructions := []*Instruction{Stop, Add, Mul, Push1, Mstore8, Return}
 	for _, ix := range instructions {
 		if err := registry.register(ix); err != nil {
 			return err

@@ -18,6 +18,14 @@ func (w Word) Mul(b Word) Word {
 	return Word{uint256.NewInt(0).Mul(w.internal, b.internal)}
 }
 
+func (w Word) Mod(v Word) Word {
+	return Word{uint256.NewInt(0).Mod(w.internal, v.internal)}
+}
+
+func (w Word) Uint64() uint64 {
+	return w.internal.Uint64()
+}
+
 func NewWordFromUint64(value uint64) Word {
 	return Word{uint256.NewInt(value)}
 }

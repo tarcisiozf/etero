@@ -13,3 +13,8 @@ Run a simple example using stack and memory opcodes:
 ```shell
 go run example/main.go 600660070260005360016000f3
 ```
+
+### TODO
+
+- [ ] improve debuggability of code execution
+- [ ] add error wrappers

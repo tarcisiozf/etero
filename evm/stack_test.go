@@ -32,4 +32,10 @@ func TestNewStack(t *testing.T) {
 			assert.Error(t, err, "stack underflow")
 		})
 	})
+
+	t.Run("peek", func(t *testing.T) {
+		_ = stack.push(value)
+		item := stack.peek(0)
+		assert.Equal(t, value.String(), item.String())
+	})
 }

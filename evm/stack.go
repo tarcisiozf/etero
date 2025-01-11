@@ -35,3 +35,7 @@ func (s *Stack) pop() (w Word, e error) {
 
 	return item, nil
 }
+
+func (s *Stack) peek(pos int) Word {
+	return s.storage[len(s.storage)-pos-1]
+}

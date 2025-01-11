@@ -191,13 +191,13 @@ func TestOpcode_Jumpi(t *testing.T) {
 
 func TestOpcode_Sub(t *testing.T) {
 	ctx := NewExecutionContext(nil)
-	_ = ctx.stack.push(NewWordFromUint64(2))
-	_ = ctx.stack.push(NewWordFromUint64(1))
+	_ = ctx.stack.push(NewWordFromUint64(3))
+	_ = ctx.stack.push(NewWordFromUint64(10))
 
 	err := Sub.execFunc(ctx)
 	assert.Nil(t, err)
 
 	w, err := ctx.stack.pop()
 	assert.Nil(t, err)
-	assert.Equal(t, uint64(1), w.Uint64())
+	assert.Equal(t, uint64(7), w.Uint64())
 }

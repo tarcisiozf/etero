@@ -1,6 +1,9 @@
 package evm
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 var (
 	Stop = &Instruction{
@@ -12,38 +15,55 @@ var (
 		},
 	}
 
-	Push1  = makePushFunc(0x60, "PUSH1", 1)
-	Push2  = makePushFunc(0x61, "PUSH2", 2)
-	Push3  = makePushFunc(0x62, "PUSH3", 3)
-	Push4  = makePushFunc(0x63, "PUSH4", 4)
-	Push5  = makePushFunc(0x64, "PUSH5", 5)
-	Push6  = makePushFunc(0x65, "PUSH6", 6)
-	Push7  = makePushFunc(0x66, "PUSH7", 7)
-	Push8  = makePushFunc(0x67, "PUSH8", 8)
-	Push9  = makePushFunc(0x68, "PUSH9", 9)
-	Push10 = makePushFunc(0x69, "PUSH10", 10)
-	Push11 = makePushFunc(0x6A, "PUSH11", 11)
-	Push12 = makePushFunc(0x6B, "PUSH12", 12)
-	Push13 = makePushFunc(0x6C, "PUSH13", 13)
-	Push14 = makePushFunc(0x6D, "PUSH14", 14)
-	Push15 = makePushFunc(0x6E, "PUSH15", 15)
-	Push16 = makePushFunc(0x6F, "PUSH16", 16)
-	Push17 = makePushFunc(0x70, "PUSH17", 17)
-	Push18 = makePushFunc(0x71, "PUSH18", 18)
-	Push19 = makePushFunc(0x72, "PUSH19", 19)
-	Push20 = makePushFunc(0x73, "PUSH20", 20)
-	Push21 = makePushFunc(0x74, "PUSH21", 21)
-	Push22 = makePushFunc(0x75, "PUSH22", 22)
-	Push23 = makePushFunc(0x76, "PUSH23", 23)
-	Push24 = makePushFunc(0x77, "PUSH24", 24)
-	Push25 = makePushFunc(0x78, "PUSH25", 25)
-	Push26 = makePushFunc(0x79, "PUSH26", 26)
-	Push27 = makePushFunc(0x7A, "PUSH27", 27)
-	Push28 = makePushFunc(0x7B, "PUSH28", 28)
-	Push29 = makePushFunc(0x7C, "PUSH29", 29)
-	Push30 = makePushFunc(0x7D, "PUSH30", 30)
-	Push31 = makePushFunc(0x7E, "PUSH31", 31)
-	Push32 = makePushFunc(0x7F, "PUSH32", 32)
+	Push1  = makePushFunc(0x60, 1)
+	Push2  = makePushFunc(0x61, 2)
+	Push3  = makePushFunc(0x62, 3)
+	Push4  = makePushFunc(0x63, 4)
+	Push5  = makePushFunc(0x64, 5)
+	Push6  = makePushFunc(0x65, 6)
+	Push7  = makePushFunc(0x66, 7)
+	Push8  = makePushFunc(0x67, 8)
+	Push9  = makePushFunc(0x68, 9)
+	Push10 = makePushFunc(0x69, 10)
+	Push11 = makePushFunc(0x6A, 11)
+	Push12 = makePushFunc(0x6B, 12)
+	Push13 = makePushFunc(0x6C, 13)
+	Push14 = makePushFunc(0x6D, 14)
+	Push15 = makePushFunc(0x6E, 15)
+	Push16 = makePushFunc(0x6F, 16)
+	Push17 = makePushFunc(0x70, 17)
+	Push18 = makePushFunc(0x71, 18)
+	Push19 = makePushFunc(0x72, 19)
+	Push20 = makePushFunc(0x73, 20)
+	Push21 = makePushFunc(0x74, 21)
+	Push22 = makePushFunc(0x75, 22)
+	Push23 = makePushFunc(0x76, 23)
+	Push24 = makePushFunc(0x77, 24)
+	Push25 = makePushFunc(0x78, 25)
+	Push26 = makePushFunc(0x79, 26)
+	Push27 = makePushFunc(0x7A, 27)
+	Push28 = makePushFunc(0x7B, 28)
+	Push29 = makePushFunc(0x7C, 29)
+	Push30 = makePushFunc(0x7D, 30)
+	Push31 = makePushFunc(0x7E, 31)
+	Push32 = makePushFunc(0x7F, 32)
+
+	Dup1  = makeDupFunc(0x80, 1)
+	Dup2  = makeDupFunc(0x81, 2)
+	Dup3  = makeDupFunc(0x82, 3)
+	Dup4  = makeDupFunc(0x83, 4)
+	Dup5  = makeDupFunc(0x84, 5)
+	Dup6  = makeDupFunc(0x85, 6)
+	Dup7  = makeDupFunc(0x86, 7)
+	Dup8  = makeDupFunc(0x87, 8)
+	Dup9  = makeDupFunc(0x88, 9)
+	Dup10 = makeDupFunc(0x89, 10)
+	Dup11 = makeDupFunc(0x8A, 11)
+	Dup12 = makeDupFunc(0x8B, 12)
+	Dup13 = makeDupFunc(0x8C, 13)
+	Dup14 = makeDupFunc(0x8D, 14)
+	Dup15 = makeDupFunc(0x8E, 15)
+	Dup16 = makeDupFunc(0x8F, 16)
 
 	Add = &Instruction{
 		opcode: 0x01,
@@ -180,7 +200,8 @@ func doJump(ctx *ExecutionContext, dest int) error {
 	return nil
 }
 
-func makePushFunc(opcode byte, name string, numBytes int) *Instruction {
+func makePushFunc(opcode byte, numBytes int) *Instruction {
+	name := fmt.Sprintf("PUSH%d", numBytes)
 	return &Instruction{
 		opcode: opcode,
 		name:   name,
@@ -188,6 +209,17 @@ func makePushFunc(opcode byte, name string, numBytes int) *Instruction {
 			data := ctx.readCode(numBytes)
 			word := NewWordFromBytes(data)
 			return ctx.stack.push(word)
+		},
+	}
+}
+
+func makeDupFunc(opcode byte, pos int) *Instruction {
+	name := fmt.Sprintf("DUP%d", pos)
+	return &Instruction{
+		opcode: opcode,
+		name:   name,
+		execFunc: func(ctx *ExecutionContext) error {
+			return ctx.stack.push(ctx.stack.peek(pos - 1))
 		},
 	}
 }

@@ -201,3 +201,26 @@ func TestOpcode_Sub(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, uint64(7), w.Uint64())
 }
+
+func TestOpcode_Dups(t *testing.T) {
+	instructions := []*Instruction{
+		Dup1, Dup2, Dup3, Dup4, Dup5, Dup6, Dup7, Dup8, Dup9,
+		Dup10, Dup11, Dup12, Dup13, Dup14, Dup15, Dup16,
+	}
+
+	ctx := NewExecutionContext(nil)
+	for i := range instructions {
+		_ = ctx.stack.push(NewWordFromUint64(uint64(len(instructions) - i)))
+	}
+
+	for i, ix := range instructions {
+		t.Run(ix.name, func(t *testing.T) {
+			err := ix.execFunc(ctx)
+			assert.Nil(t, err)
+
+			w, err := ctx.stack.pop()
+			assert.Nil(t, err)
+			assert.Equal(t, uint64(i+1), w.Uint64())
+		})
+	}
+}

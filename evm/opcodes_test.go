@@ -224,3 +224,25 @@ func TestOpcode_Dups(t *testing.T) {
 		})
 	}
 }
+
+func TestOpcode_Swaps(t *testing.T) {
+	instructions := []*Instruction{
+		Swap1, Swap2, Swap3, Swap4, Swap5, Swap6, Swap7, Swap8, Swap9,
+		Swap10, Swap11, Swap12, Swap13, Swap14, Swap15, Swap16,
+	}
+
+	for i, ix := range instructions {
+		t.Run(ix.name, func(t *testing.T) {
+			ctx := NewExecutionContext(nil)
+			for i := range instructions {
+				_ = ctx.stack.push(NewWordFromUint64(uint64(len(instructions) - i)))
+			}
+
+			err := ix.execFunc(ctx)
+			assert.Nil(t, err)
+
+			w := ctx.stack.peek(0)
+			assert.Equal(t, uint64(i+1), w.Uint64())
+		})
+	}
+}

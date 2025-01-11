@@ -39,3 +39,17 @@ func (s *Stack) pop() (w Word, e error) {
 func (s *Stack) peek(pos int) Word {
 	return s.storage[len(s.storage)-pos-1]
 }
+
+func (s *Stack) swap(pos int) error {
+	if pos == 0 {
+		return nil
+	}
+
+	size := len(s.storage)
+	if pos >= size {
+		return errors.New("invalid swap position")
+	}
+
+	s.storage[size-1], s.storage[size-1-pos] = s.storage[size-1-pos], s.storage[size-1]
+	return nil
+}

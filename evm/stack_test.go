@@ -38,4 +38,19 @@ func TestNewStack(t *testing.T) {
 		item := stack.peek(0)
 		assert.Equal(t, value.String(), item.String())
 	})
+
+	t.Run("swap", func(t *testing.T) {
+		stack = NewStack(2)
+		_ = stack.push(NewWordFromUint64(123))
+		_ = stack.push(value)
+
+		err := stack.swap(1)
+		assert.Nil(t, err)
+
+		item := stack.peek(0)
+		assert.Equal(t, "123", item.String())
+
+		item = stack.peek(1)
+		assert.Equal(t, value.String(), item.String())
+	})
 }

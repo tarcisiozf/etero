@@ -65,6 +65,23 @@ var (
 	Dup15 = makeDupFunc(0x8E, 15)
 	Dup16 = makeDupFunc(0x8F, 16)
 
+	Swap1  = makeSwapFunc(0x90, 1)
+	Swap2  = makeSwapFunc(0x91, 2)
+	Swap3  = makeSwapFunc(0x92, 3)
+	Swap4  = makeSwapFunc(0x93, 4)
+	Swap5  = makeSwapFunc(0x94, 5)
+	Swap6  = makeSwapFunc(0x95, 6)
+	Swap7  = makeSwapFunc(0x96, 7)
+	Swap8  = makeSwapFunc(0x97, 8)
+	Swap9  = makeSwapFunc(0x98, 9)
+	Swap10 = makeSwapFunc(0x99, 10)
+	Swap11 = makeSwapFunc(0x9A, 11)
+	Swap12 = makeSwapFunc(0x9B, 12)
+	Swap13 = makeSwapFunc(0x9C, 13)
+	Swap14 = makeSwapFunc(0x9D, 14)
+	Swap15 = makeSwapFunc(0x9E, 15)
+	Swap16 = makeSwapFunc(0x9F, 16)
+
 	Add = &Instruction{
 		opcode: 0x01,
 		name:   "ADD",
@@ -220,6 +237,17 @@ func makeDupFunc(opcode byte, pos int) *Instruction {
 		name:   name,
 		execFunc: func(ctx *ExecutionContext) error {
 			return ctx.stack.push(ctx.stack.peek(pos - 1))
+		},
+	}
+}
+
+func makeSwapFunc(opcode byte, pos int) *Instruction {
+	name := fmt.Sprintf("SWAP%d", pos)
+	return &Instruction{
+		opcode: opcode,
+		name:   name,
+		execFunc: func(ctx *ExecutionContext) error {
+			return ctx.stack.swap(pos - 1)
 		},
 	}
 }

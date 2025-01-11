@@ -77,6 +77,22 @@ var (
 		},
 	}
 
+	Sub = &Instruction{
+		opcode: 0x03,
+		name:   "SUB",
+		execFunc: func(ctx *ExecutionContext) error {
+			a, err := ctx.stack.pop()
+			if err != nil {
+				return err
+			}
+			b, err := ctx.stack.pop()
+			if err != nil {
+				return err
+			}
+			return ctx.stack.push(a.Sub(b)) // TODO: mod 2**256
+		},
+	}
+
 	Mstore8 = &Instruction{
 		opcode: 0x53,
 		name:   "MSTORE8",

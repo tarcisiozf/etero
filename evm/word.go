@@ -31,6 +31,10 @@ func (w Word) Uint64() uint64 {
 	return w.internal.Uint64()
 }
 
+func (w Word) Sub(b Word) Word {
+	return Word{uint256.NewInt(0).Sub(w.internal, b.internal)}
+}
+
 func NewWordFromUint64(value uint64) Word {
 	return Word{uint256.NewInt(value)}
 }

@@ -188,3 +188,16 @@ func TestOpcode_Jumpi(t *testing.T) {
 		assert.NotEqual(t, jumpDest, ctx.pc)
 	})
 }
+
+func TestOpcode_Sub(t *testing.T) {
+	ctx := NewExecutionContext(nil)
+	_ = ctx.stack.push(NewWordFromUint64(2))
+	_ = ctx.stack.push(NewWordFromUint64(1))
+
+	err := Sub.execFunc(ctx)
+	assert.Nil(t, err)
+
+	w, err := ctx.stack.pop()
+	assert.Nil(t, err)
+	assert.Equal(t, uint64(1), w.Uint64())
+}

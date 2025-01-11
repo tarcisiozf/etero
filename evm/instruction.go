@@ -1,7 +1,7 @@
 package evm
 
 type Instruction struct {
-	opcode   int
+	opcode   byte
 	name     string
 	execFunc func(ctx *ExecutionContext) error
 }

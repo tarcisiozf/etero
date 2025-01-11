@@ -6,13 +6,13 @@ import (
 
 type InstructionsRegistry struct {
 	instructions []*Instruction
-	opcodeIndex  map[int]*Instruction
+	opcodeIndex  map[byte]*Instruction
 }
 
 func NewInstructionsRegistry() *InstructionsRegistry {
 	return &InstructionsRegistry{
 		instructions: make([]*Instruction, 0),
-		opcodeIndex:  make(map[int]*Instruction),
+		opcodeIndex:  make(map[byte]*Instruction),
 	}
 }
 
@@ -26,6 +26,6 @@ func (ir *InstructionsRegistry) register(instruction *Instruction) error {
 	return nil
 }
 
-func (ir *InstructionsRegistry) find(opcode int) *Instruction {
+func (ir *InstructionsRegistry) find(opcode byte) *Instruction {
 	return ir.opcodeIndex[opcode]
 }

@@ -47,7 +47,7 @@ func decodeOpcode(execContext *ExecutionContext, registry *InstructionsRegistry)
 		return Stop, nil
 	}
 
-	opcode := int(execContext.readCode(1)[0])
+	opcode := execContext.readCode(1)[0]
 	instruction := registry.find(opcode)
 	if instruction == nil {
 		return nil, fmt.Errorf("unknow opcode %x", opcode)

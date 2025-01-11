@@ -11,6 +11,11 @@ func TestNewWordFromUint64(t *testing.T) {
 	assert.Equal(t, value, w.internal.Uint64())
 }
 
+func TestNewWordFromBytes(t *testing.T) {
+	w := NewWordFromBytes([]byte{1, 2, 3})
+	assert.Equal(t, uint64(66051), w.Uint64())
+}
+
 func TestWord_String(t *testing.T) {
 	value := uint64(42)
 	w := NewWordFromUint64(value)

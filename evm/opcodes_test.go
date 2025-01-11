@@ -124,3 +124,67 @@ func TestOpcode_Return(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, []byte{value}, ctx.returnData)
 }
+
+func TestOpcode_Pc(t *testing.T) {
+	ctx := NewExecutionContext(nil)
+	ctx.pc = 42
+
+	err := Pc.execFunc(ctx)
+	assert.Nil(t, err)
+
+	w, err := ctx.stack.pop()
+	assert.Nil(t, err)
+	assert.Equal(t, uint64(ctx.pc), w.Uint64())
+}
+
+func TestOpcode_Jump(t *testing.T) {
+	jumpDest := 2
+	ctx := NewExecutionContext(assemble(
+		Push1, 0,
+		JumpDest,
+	))
+
+	t.Run("jump to destination", func(t *testing.T) {
+		_ = ctx.stack.push(NewWordFromUint64(uint64(jumpDest)))
+
+		err := Jump.execFunc(ctx)
+		assert.Nil(t, err)
+		assert.Equal(t, jumpDest, ctx.pc)
+	})
+
+	t.Run("fail if destination is not valid", func(t *testing.T) {
+		_ = ctx.stack.push(NewWordFromUint64(0))
+
+		err := Jump.execFunc(ctx)
+		assert.Error(t, err, "invalid jump destination")
+	})
+}
+
+func TestOpcode_Jumpi(t *testing.T) {
+	jumpDest := 2
+	ctx := NewExecutionContext(assemble(
+		Push1, 0,
+		JumpDest,
+	))
+
+	t.Run("jump to destination", func(t *testing.T) {
+		cond := 1
+		_ = ctx.stack.push(NewWordFromUint64(uint64(cond)))
+		_ = ctx.stack.push(NewWordFromUint64(uint64(jumpDest)))
+
+		err := Jumpi.execFunc(ctx)
+		assert.Nil(t, err)
+		assert.Equal(t, jumpDest, ctx.pc)
+	})
+
+	t.Run("do not jump if condition is not met", func(t *testing.T) {
+		cond := 0
+		ctx.pc = 0
+		_ = ctx.stack.push(NewWordFromUint64(uint64(cond)))
+		_ = ctx.stack.push(NewWordFromUint64(uint64(jumpDest)))
+
+		err := Jumpi.execFunc(ctx)
+		assert.Nil(t, err)
+		assert.NotEqual(t, jumpDest, ctx.pc)
+	})
+}

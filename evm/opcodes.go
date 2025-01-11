@@ -1,5 +1,7 @@
 package evm
 
+import "errors"
+
 var (
 	Stop = &Instruction{
 		opcode: 0x00,
@@ -107,7 +109,60 @@ var (
 			return ctx.setReturnData(offset, length)
 		},
 	}
+
+	Jump = &Instruction{
+		opcode: 0x56,
+		name:   "JUMP",
+		execFunc: func(ctx *ExecutionContext) error {
+			dest, err := ctx.stack.pop()
+			if err != nil {
+				return err
+			}
+			return doJump(ctx, int(dest.Uint64()))
+		},
+	}
+
+	Jumpi = &Instruction{
+		opcode: 0x57,
+		name:   "JUMPI",
+		execFunc: func(ctx *ExecutionContext) error {
+			dest, err := ctx.stack.pop()
+			if err != nil {
+				return err
+			}
+			cond, err := ctx.stack.pop()
+			if err != nil {
+				return err
+			}
+			if cond.Uint64() != 0 {
+				return doJump(ctx, int(dest.Uint64()))
+			}
+			return nil
+		},
+	}
+
+	JumpDest = &Instruction{
+		opcode: 0x5b,
+		name:   "JUMPDEST",
+	}
+
+	Pc = &Instruction{
+		opcode: 0x58,
+		name:   "PC",
+		execFunc: func(ctx *ExecutionContext) error {
+			pc := NewWordFromUint64(uint64(ctx.pc))
+			return ctx.stack.push(pc)
+		},
+	}
 )
+
+func doJump(ctx *ExecutionContext, dest int) error {
+	if !ctx.jumpdests[dest] {
+		return errors.New("invalid jump destination")
+	}
+	ctx.pc = dest
+	return nil
+}
 
 func makePushFunc(opcode byte, name string, numBytes int) *Instruction {
 	return &Instruction{
